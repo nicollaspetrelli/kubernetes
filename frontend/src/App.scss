@@ -1,0 +1,11 @@
+@import "bootstrap/scss/bootstrap";
+
+body, html, #root {
+  height: 100%;
+}
+
+.center-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

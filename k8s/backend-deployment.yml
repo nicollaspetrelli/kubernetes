@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend
+          image: workshop/api
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 3000
+              name: nodejs-port
+          env:
+            - name: DEBUG
+              value: "express:*"
+            - name: MONGODB_URI
+              value: "mongodb://mongodb-service/app"
+            - name: COOKIE_SECRET
+              value: "lAow[3Sl)IX*!h=kueg+j=z)"
+#            - name: CORS_ORIGIN
+#              value: "https://app.example.com,https://app2.example.com"
+  selector:
+    matchLabels:
+      app: backend

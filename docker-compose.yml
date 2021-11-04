@@ -1,0 +1,48 @@
+version: '3.8'
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: dev.Dockerfile
+    ports:
+      - 3000:3000
+    volumes:
+      - ./frontend:/app
+      - "reservedApp:/app/node_modules"
+    environment:
+      REACT_APP_API_URL: http://backend:9000
+
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - 9000:9000
+    volumes:
+      - ./backend:/app
+      - "reservedServer:/app/node_modules"
+    environment:
+      PORT: 9000
+      MONGODB_URI: "mongodb://local:local@mongo/app?authSource=admin"
+      CORS_ORIGIN: "http://localhost:3000,http://frontend:3000"
+      COOKIE_SECRET: Wq.6#59c*+:z\3MALq\L_[i=
+#      HTTPS: 1
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_NON_ROOT_USERNAME: local
+      MONGO_NON_ROOT_PASSWORD: local
+      MONGO_INITDB_ROOT_USERNAME: local
+      MONGO_INITDB_ROOT_PASSWORD: local
+      MONGO_INITDB_DATABASE: test
+    volumes:
+      - ./data/db:/data/db
+
+volumes:
+  reservedApp:
+  reservedServer:
